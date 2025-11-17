@@ -1,5 +1,7 @@
 <!-- src/routes/+layout.svelte -->
 <script>
+  export let data;
+
   import { onMount } from "svelte";
   import { afterNavigate } from "$app/navigation";
   import { page } from "$app/stores";
@@ -115,42 +117,44 @@
     </div>
   {/key}
 
-  <footer class="footer">
-    <div class="footer-inner">
-      <div>
-        <strong>Contact</strong>
-        <ul>
-          <li>
-            Email:
-            <a href="mailto:chiewccy1@gmail.com">chiewccy1@gmail.com</a>
-          </li>
-          <li>
-            GitHub:
-            <a
-              href="https://github.com/ccy7701"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              github.com/ccy7701
-            </a>
-          </li>
-          <li>
-            LinkedIn:
-            <a
-              href="https://www.linkedin.com/in/chiew-cheng-yi-165abb222"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              linkedin.com/in/chiew-cheng-yi-165abb222
-            </a>
-          </li>
-        </ul>
+  {#if !data?.hideFooter}
+    <footer class="footer">
+      <div class="footer-inner">
+        <div>
+          <strong>Contact</strong>
+          <ul>
+            <li>
+              Email:
+              <a href="mailto:chiewccy1@gmail.com">chiewccy1@gmail.com</a>
+            </li>
+            <li>
+              GitHub:
+              <a
+                href="https://github.com/ccy7701"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                github.com/ccy7701
+              </a>
+            </li>
+            <li>
+              LinkedIn:
+              <a
+                href="https://www.linkedin.com/in/chiew-cheng-yi-165abb222"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                linkedin.com/in/chiew-cheng-yi-165abb222
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="footer-meta">
+          <small>© {new Date().getFullYear()} Chiew Cheng Yi</small>
+        </div>
       </div>
-      <div class="footer-meta">
-        <small>© {new Date().getFullYear()} Chiew Cheng Yi</small>
-      </div>
-    </div>
-  </footer>
+    </footer>
+  {/if}
 </main>
 
 <!-- GLOBAL LIGHTBOX -->
