@@ -1,8 +1,17 @@
 <!-- src/routes/+layout.svelte -->
 <script>
   import { onMount } from "svelte";
+  import { afterNavigate } from "$app/navigation";
+  import { page } from "$app/stores";
+  import { fly, fade } from "svelte/transition";
 
   let theme = "light";
+
+  afterNavigate(() => {
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 0);
+  });
 
   onMount(() => {
     const stored = localStorage.getItem("theme");
@@ -27,11 +36,11 @@
       <a href="/" class="logo">CHIEW CHENG YI</a>
     </div>
     <nav class="nav-right">
-      <a href="/#about">About</a>
-      <a href="/projects">Projects</a>
-      <a href="/awards">Awards</a>
-      <a href="/publications">Publications</a>
-      <a href="/writing">Writing</a>
+      <a href="/#about" class:active={$page.url.hash === "#about"}>About</a>
+      <a href="/projects" class:active={$page.url.pathname === "/projects"}>Projects</a>
+      <a href="/awards" class:active={$page.url.pathname === "/awards"}>Awards</a>
+      <a href="/publications" class:active={$page.url.pathname === "/publications"}>Publications</a>
+      <a href="/writing" class:active={$page.url.pathname === "/writing"}>Writing</a>
 
       <button class="theme-toggle" on:click={toggleTheme}>
         {theme === "light" ? "🌙" : "☀️"}
@@ -39,9 +48,15 @@
     </nav>
   </header>
 
-  <div class="content">
+  <!-- <div class="content">
     <slot />
-  </div>
+  </div> -->
+
+  {#key $page.url.pathname}
+    <div class="page page-enter">
+      <slot />
+    </div>
+  {/key}
 
   <footer class="footer">
     <div class="footer-inner">
@@ -152,6 +167,21 @@
     flex-direction: column;
   }
 
+  .page-enter {
+    animation: slideFadeIn 220ms ease forwards;
+  }
+
+  @keyframes slideFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   /* =========================================================
     NAVBAR
     ========================================================= */
@@ -187,8 +217,10 @@
     font-size: 0.9rem;
   }
 
-  .nav-right a {
-    opacity: 0.8;
+  .nav-right a.active {
+    font-weight: bold;
+    color: var(--accent-light);
+    opacity: 1 !important;
   }
 
   .nav-right a:hover {
