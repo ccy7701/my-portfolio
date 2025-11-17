@@ -83,10 +83,13 @@
       clean, scalable systems and products that create real user impact.
     </p>
     <div class="hero-links">
-      <a href="mailto:chiewccy1@gmail.com">Email</a>
-      <a href="https://github.com/ccy7701" target="_blank" rel="noopener noreferrer">GitHub</a>
-      <a href="https://www.linkedin.com/in/chiew-cheng-yi-165abb222" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-      <!-- Later: add CV/Resume PDF link here -->
+      <a class="btn ghost" href="mailto:chiewccy1@gmail.com">Email</a>
+      <a class="btn ghost" href="https://github.com/ccy7701" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a class="btn ghost" href="https://www.linkedin.com/in/chiew-cheng-yi-165abb222" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+    <div class="hero-links secondary">
+      <a class="btn solid" href="/Resume_17112025.pdf" download>Download Résumé</a>
+      <a class="btn solid" href="/CV_17112025.pdf" download>Download CV</a>
     </div>
   </section>
 
@@ -152,15 +155,15 @@
         <p>HTML, CSS, JavaScript, PHP, Python, Java, Kotlin, C, C++</p>
       </div>
       <div>
-        <h3>Frameworks & Tools</h3>
+        <h3>Frameworks &amp; Tools</h3>
         <p>Laravel, Bootstrap, WordPress, Jupyter Notebook</p>
       </div>
       <div>
-        <h3>Databases & Deployment</h3>
+        <h3>Databases &amp; Deployment</h3>
         <p>MySQL, SQLite, Apache, XAMPP, DigitalOcean, Git, GitHub, Trello</p>
       </div>
       <div>
-        <h3>Design & Productivity</h3>
+        <h3>Design &amp; Productivity</h3>
         <p>Figma, Canva, DaVinci Resolve, MS Office, Google Workspace</p>
       </div>
       <div>
@@ -187,11 +190,17 @@
 </main>
 
 <style>
+  :global(body) {
+    margin: 0;
+    background: #15110f; /* dark earth */
+    color: #f4eee6;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
   main {
     max-width: 960px;
     margin: 0 auto;
     padding: 2rem 1.5rem 4rem;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   }
 
   .nav {
@@ -200,11 +209,12 @@
     align-items: center;
     margin-bottom: 2rem;
     gap: 1rem;
+    font-size: 0.9rem;
   }
 
   .logo {
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.12em;
     font-size: 0.9rem;
   }
 
@@ -212,15 +222,16 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-    font-size: 0.9rem;
   }
 
   .nav-right a {
     text-decoration: none;
-    color: #444;
+    color: #e0d7c7;
+    opacity: 0.85;
   }
 
   .nav-right a:hover {
+    opacity: 1;
     text-decoration: underline;
   }
 
@@ -229,14 +240,15 @@
   }
 
   .hero h1 {
-    font-size: 2rem;
+    font-size: 2.3rem;
     margin-bottom: 0.75rem;
   }
 
   .hero p {
     max-width: 40rem;
-    line-height: 1.5;
-    margin-bottom: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    color: #d8cebf;
   }
 
   .hero-links {
@@ -245,17 +257,42 @@
     gap: 0.75rem;
   }
 
-  .hero-links a {
-    font-size: 0.9rem;
-    padding: 0.5rem 0.9rem;
-    border-radius: 999px;
-    border: 1px solid #ccc;
-    text-decoration: none;
-    color: #333;
+  .hero-links.secondary {
+    margin-top: 0.75rem;
   }
 
-  .hero-links a:hover {
-    border-color: #000;
+  .btn {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.95rem;
+    border-radius: 999px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn.ghost {
+    border: 1px solid rgba(244, 238, 230, 0.3);
+    color: #f4eee6;
+    background: transparent;
+  }
+
+  .btn.ghost:hover {
+    border-color: #f4eee6;
+    background: rgba(244, 238, 230, 0.06);
+  }
+
+  .btn.solid {
+    border: 1px solid #c78b4b;
+    background: #c78b4b;
+    color: #1a130f;
+  }
+
+  .btn.solid:hover {
+    background: #d69a57;
+    border-color: #d69a57;
   }
 
   .section {
@@ -268,7 +305,7 @@
   }
 
   .section p {
-    line-height: 1.5;
+    line-height: 1.6;
   }
 
   .cards {
@@ -277,10 +314,10 @@
   }
 
   .card {
-    border: 1px solid #eee;
     border-radius: 0.75rem;
     padding: 1rem 1.25rem;
-    background: #fafafa;
+    background: #221813;
+    border: 1px solid rgba(244, 238, 230, 0.08);
   }
 
   .card h3 {
@@ -289,7 +326,7 @@
   }
 
   .muted {
-    color: #777;
+    color: #aa9f92;
     font-size: 0.85rem;
     margin-bottom: 0.4rem;
   }
@@ -297,7 +334,7 @@
   .tech {
     margin-top: 0.5rem;
     font-size: 0.85rem;
-    color: #555;
+    color: #c4b7a5;
   }
 
   .pub-list {
@@ -309,6 +346,11 @@
 
   .pub-list a {
     font-size: 0.85rem;
+    color: #d69a57;
+  }
+
+  .pub-list a:hover {
+    text-decoration: underline;
   }
 
   .skills-grid {
@@ -330,10 +372,19 @@
     margin-bottom: 0.3rem;
   }
 
+  #contact a {
+    color: #d69a57;
+    text-decoration: none;
+  }
+
+  #contact a:hover {
+    text-decoration: underline;
+  }
+
   .footer {
     margin-top: 3rem;
     text-align: center;
-    color: #777;
+    color: #8e8275;
     font-size: 0.8rem;
   }
 
