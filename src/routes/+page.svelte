@@ -24,7 +24,7 @@
     >
   </div>
   <div class="hero-links secondary">
-    <a class="btn solid" href="/Resume_17112025.pdf" download>Download Résumé</a>
-    <a class="btn solid" href="/CV_17112025.pdf" download>Download CV</a>
+    <a class="btn solid" href="/documents/Resume_17112025.pdf" download>Download Résumé</a>
+    <a class="btn solid" href="/documents/CV_17112025.pdf" download>Download CV</a>
   </div>
 </section>

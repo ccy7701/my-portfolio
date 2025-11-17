@@ -15,6 +15,8 @@
   } from "../lib/lightbox";
 
   let visible;
+  let isClosing = false;
+  let fading = "";
   let images = [];
   let captions = [];
   let index = 0;
@@ -33,6 +35,14 @@
   let originX = 0;
   let originY = 0;
   let dragging = false;
+
+  function handleCloseLightbox() {
+    isClosing = true;
+    setTimeout(() => {
+      closeLightbox();
+      isClosing = false;
+    }, 250);
+  }
 
   function handleKey(e) {
     if (!visible) return;
@@ -136,16 +146,32 @@
 <!-- GLOBAL LIGHTBOX -->
 {#if visible}
   <div
-    class="lb-overlay"
-    on:click={() => closeLightbox()}
+    class="lb-overlay {isClosing ? 'fadeOut' : ''}"
+    on:click={() => handleCloseLightbox()}
   >
     <!-- close button -->
-    <button class="lb-close" on:click|stopPropagation={closeLightbox}>×</button>
+    <button class="lb-close" on:click|stopPropagation={handleCloseLightbox}>×</button>
 
     <!-- arrows -->
     {#if images.length > 1}
-      <button class="lb-nav left" on:click|stopPropagation={prevImage}>‹</button>
-      <button class="lb-nav right" on:click|stopPropagation={nextImage}>›</button>
+      <button
+        class="lb-nav left"
+        on:click|stopPropagation={() => {
+          fading = "prev";
+          setTimeout(() => prevImage(), 80);
+        }}
+      >
+        ‹
+      </button>
+      <button
+        class="lb-nav right"
+        on:click|stopPropagation={() => {
+          fading = "next";
+          setTimeout(() => nextImage(), 80);
+        }}
+      >
+        ›
+      </button>
     {/if}
 
     <!-- image container -->
@@ -160,18 +186,19 @@
       <img
         src={images[index]}
         alt=""
-        class="lb-image"
+        class="lb-image {fading}"
         style="transform: translate({offsetX}px, {offsetY}px) scale({scale});"
+        on:load={() => (fading = "")}
         on:click|stopPropagation
       />
     </div>
 
     <!-- caption -->
-    {#if captions[index]}
+    <!-- {#if captions[index]}
       <div class="lb-caption">
         {captions[index]}
       </div>
-    {/if}
+    {/if} -->
 
     <!-- ================================
          THUMBNAILS STRIP
@@ -317,8 +344,8 @@
 
   .logo {
     font-weight: 700;
-    letter-spacing: 0.12em;
-    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    font-size: 1.2rem;
   }
 
   .nav-right a.active {
@@ -419,7 +446,7 @@
     justify-content: center;
     align-items: center;
     z-index: 999999;
-    animation: fadeIn 0.25s ease;
+    animation: fadeIn 0.15s ease;
     overflow: hidden;
   }
 
@@ -471,7 +498,16 @@
     border-radius: 12px;
     user-select: none;
     pointer-events: auto;
-    transition: transform 0.15s ease;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  .lb-image.next {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  .lb-image.prev {
+    transform: translateX(-20px);
+    opacity: 0;
   }
 
   .lb-caption {
@@ -490,6 +526,15 @@
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+  }
+
+  @keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  .lb-overlay.fadeOut {
+    animation: fadeOut 0.15s ease forwards;
   }
 
   /* ================================================
