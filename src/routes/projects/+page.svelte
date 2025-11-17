@@ -1,54 +1,46 @@
 <!-- src/routes/projects/+page.svelte -->
 <script>
-  import { openLightbox } from "../../lib/lightbox";
+  const modules = import.meta.glob('./*/+page.js', { eager: true });
 
-  const projects = [
-    {
-      title: "UMS Student Academic Companion System (UMSSACS)",
-      period: "2024 – 2025",
-      description:
-        "Web-based system that helps students organise timetables, track CGPA, discover events, and connect with peers through ML study partner matching.",
-      images: ["/placeholder.jpg"]
-    },
-    {
-      title: "JomDining (Point of Sales App)",
-      period: "2024",
-      description:
-        "Android-based Point of Sales system for restaurant operations. Responsible for backend logic, database schema design, and app–database integration.",
-      images: ["/placeholder.jpg"]
-    },
-    {
-      title: "Electroholics (E-Commerce Web App)",
-      period: "2023 – 2024",
-      description:
-        "Localized e-commerce platform targeted toward computer hardware retail. Oversaw task coordination, UI development, and backend integration.",
-      images: ["/placeholder.jpg"]
-    }
-  ];
+  const projects = Object.entries(modules)
+    .map(([path, mod]) => {
+      const slug = path.split('/')[1];
+      const data = mod.load().project;
+
+      return {
+        slug,
+        order: data.order,
+        title: data.title,
+        period: data.period,
+        description: data.description,
+        thumbnail: data.images[0]
+      };
+    })
+    .sort((a, b) => a.order - b.order);
 </script>
 
 <section class="section section-header">
   <div class="section-header-inner">
     <h2>Projects</h2>
     <p class="section-subtitle">
-      Technical work I have undertaken covering full-stack web development, mobile applications, and applied software engineering
+      Technical projects I’ve undertaken across full-stack web development, mobile applications, and applied software engineering
     </p>
   </div>
+</section>
 
-  <div class="projects-list">
-    {#each projects as project}
-      <article class="project-row">
-        <div class="project-text">
-          <h3 class="project-title">{project.title}</h3>
-          <p class="project-subtitle">{project.period}</p>
-          <p>{project.description}</p>
-        </div>
+<section class="projects-list">
+  {#each projects as p}
+    <a class="project-card" href={`/projects/${p.slug}`}>
+      <div class="project-card-text">
+        <h3>{p.title}</h3>
+        <p class="period">{p.period}</p>
+        <br>
+        <p>{p.description}</p>
+      </div>
 
-        <!-- Preview image -->
-        <img class="project-image" src={project.images[0]} alt={project.title} />
-      </article>
-    {/each}
-  </div>
+      <img src={p.thumbnail} alt={p.title} class="project-thumb" />
+    </a>
+  {/each}
 </section>
 
 <style>
@@ -73,64 +65,54 @@
     margin: 0 auto;
   }
 
-  /* --- LAYOUT FIXES --- */
-  .projects-list {
+   .projects-list {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    margin-top: 1.5rem;
+    gap: 1.35rem;
   }
 
-  .project-row {
+  .project-card {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 0.75rem;
-    padding: 1.25rem 1.25rem;
-    gap: 1.5rem;
-    transition: transform 0.2s ease;
+    border: 1px solid var(--card-border);
+    padding: 1.5rem 1.75rem;
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text);
+    gap: 2rem;
   }
 
-  .project-title {
-    font-size: 1.35rem;
-    font-weight: 600;
-    margin: 0;
+  .project-card:hover {
+    border-color: var(--accent-light);
+    transform: translateY(-2px);
+    transition: 0.15s ease;
   }
 
-  .project-subtitle {
-    margin: 0.5rem 0 0.5rem;
+  .project-card-text {
+    flex: 1;
+    padding-right: 1.25rem;
+  }
+
+  .project-card-text h3 {
+    margin: 0 0 0.3rem;
+  }
+
+  .project-card-text p {
+    margin: 0.25rem 0;
+  }
+
+  .period {
+    margin: 0.15rem 0 0.5rem;
     font-size: 1rem;
     color: var(--text-muted);
   }
 
-  .project-text {
-    flex: 1;
-  }
-
-  .project-image {
-    width: 340px;
+  .project-thumb {
+    width: 300px;
     height: auto;
-    max-height: 200px;
+    border-radius: 10px;
     object-fit: cover;
-    border-radius: 0.5rem;
-  }
-
-  .project-row:hover {
-    transform: scale(1.01);
-    cursor: pointer;
-    border-color: var(--accent-light);
-    background: rgba(0, 0, 0, 0.03);
-  }
-
-  /* Responsive */
-  @media (max-width: 750px) {
-    .project-row {
-      flex-direction: column;
-    }
-    .project-image {
-      width: 100%;
-      max-height: 240px;
-    }
   }
 </style>
