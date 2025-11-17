@@ -21,8 +21,7 @@
   <div class="section-header-inner">
     <h2>Writing</h2>
     <p class="section-subtitle">
-      I write occasionally about learning, software engineering, and transitions in study or
-      career. This space will be updated with selected pieces over time.
+      I use writing as an outlet to think aloud, record lessons from projects or life transitions, and refine the way I understand the world
     </p>
   </div>
 
@@ -44,7 +43,6 @@
     </div>
   {/if}
 </section>
-
 
 <style>
   .section-header-inner {

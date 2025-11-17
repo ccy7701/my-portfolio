@@ -1,32 +1,163 @@
-<!-- src/routes/publications/+page.svelte -->
 <script>
   const publications = [
     {
       title: "Revolutionizing Airline Customer Satisfaction Analysis with Machine Learning Techniques",
-      venue: "IRICT 2023 (2024)",
-      link: "https://doi.org/10.1007/978-3-031-59707-7_13"
+      year: "2024",
+      venue: "IRICT 2023",
+      doi: "https://doi.org/10.1007/978-3-031-59707-7_13",
+      authors: "Ibrahim, A. O., Chiew, C. Y., Elsafi, A., Ghaleb, F. A.",
+      points: [
+        "Explored predictive modelling approaches for assessing customer satisfaction in the airline industry.",
+        "Evaluated multiple algorithms to identify effective methods for data-driven insights."
+      ]
     },
     {
       title: "An Investigation of the Effect of Weather on Hand-Foot-Mouth Disease Incidence in Sarawak",
-      venue: "ICACSE 2023 (2024)",
-      link: "https://doi.org/10.1007/978-981-97-2977-7_25"
+      year: "2024",
+      venue: "ICACSE 2023",
+      doi: "https://doi.org/10.1007/978-981-97-2977-7_25",
+      authors: "Ibrahim, A.O., Chen, W.Y., Robert, J.Z., Chiew, C. Y., Majid, M.A.",
+      points: [
+        "Investigated the relationship between environmental factors and HFMD incidence using machine learning.",
+        "Integrated datasets to support data-centric public health analysis."
+      ]
     }
   ];
 </script>
 
-<section class="section">
-  <h2>Publications</h2>
-  <p class="section-intro">
-    Conference publications co-authored during my degree, focusing on machine learning
-    applications in customer satisfaction analysis and public health.
-  </p>
-  <ul class="pub-list">
+<section class="section section-header">
+  <div class="section-header-inner">
+    <h2>Publications</h2>
+    <p class="section-subtitle">
+      Research papers I helped produce during my studies, guided by my lecturer and centered on applying machine learning to real datasets
+    </p>
+  </div>
+
+  <div class="pub-grid">
     {#each publications as pub}
-      <li>
-        <strong>{pub.title}</strong><br />
-        <span class="muted">{pub.venue}</span><br />
-        <a href={pub.link} target="_blank" rel="noopener noreferrer">{pub.link}</a>
-      </li>
+      <article class="pub-card">
+        <h3 class="pub-title">{pub.title}</h3>
+        <p class="pub-year">{pub.year}</p>
+
+        <p class="pub-venue">
+          {pub.venue} — 
+          <a 
+            href={pub.doi} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="doi"
+          >
+            DOI link
+          </a>
+        </p>
+
+        <p class="pub-authors">{pub.authors}</p>
+
+        <ul class="pub-points">
+          {#each pub.points as point}
+            <li>{point}</li>
+          {/each}
+        </ul>
+      </article>
     {/each}
-  </ul>
+  </div>
 </section>
+
+<style>
+  /* ----- Section Header ----- */
+  .section-header-inner {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 3.5rem;
+  }
+
+  .section-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.4px;
+  }
+
+  .section-subtitle {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  /* ----- Grid Layout ----- */
+  .pub-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 800px) {
+    .pub-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* ----- Publication Card ----- */
+  .pub-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    padding: 1.4rem 1.6rem;
+    border-radius: 12px;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+  }
+
+  .pub-card:hover {
+    border-color: var(--accent-light);
+    background: rgba(0,0,0,0.03);
+    transform: translateY(-3px);
+  }
+
+  .pub-title {
+    margin: 0 0 0.5rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--text);
+  }
+
+  .pub-year {
+    margin: 0 0 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .pub-venue {
+    margin: 0 0 0.35rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .doi {
+    color: var(--accent-light);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .doi:hover {
+    text-decoration: underline;
+  }
+
+  .pub-authors {
+    margin: 0.5rem 0 0.8rem;
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+
+  .pub-points {
+    padding-left: 1.2rem;
+    margin: 0;
+    color: var(--text);
+    line-height: 1.45;
+    font-size: 0.9rem;
+  }
+
+  .pub-points li {
+    margin-bottom: 0.35rem;
+  }
+</style>
