@@ -98,7 +98,7 @@
       <a href="/projects" class:active={$page.url.pathname === "/projects"}>Projects</a>
       <a href="/awards" class:active={$page.url.pathname === "/awards"}>Awards</a>
       <a href="/publications" class:active={$page.url.pathname === "/publications"}>Publications</a>
-      <a href="/writing" class:active={$page.url.pathname === "/writing"}>Writing</a>
+      <a href="/writing" class:active={$page.url.pathname.startsWith("/writing")}>Writing</a>
 
       {#if theme}
         <button class="theme-toggle" on:click={toggleTheme} aria-label="Toggle theme">
