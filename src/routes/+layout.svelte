@@ -24,7 +24,7 @@
   $: captions = $lightboxCaptions;
   $: index = $lightboxIndex;
 
-  let theme = "light";
+  let theme;
 
   // Zoom + Pan vars...
   let scale = 1;
@@ -45,15 +45,20 @@
     // safe to access window here
     window.addEventListener("keydown", handleKey);
 
-    // scroll to top on navigation
-    afterNavigate(() => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-
     // theme init
     const stored = localStorage.getItem("theme");
-    theme = stored || "light";
+    theme = localStorage.getItem("theme") || "light";
     document.documentElement.setAttribute("data-theme", theme);
+  });
+
+  // scroll to top on navigation
+  afterNavigate(() => {
+    // Let Svelte update the DOM first
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    });
   });
 
   function toggleTheme() {
@@ -69,21 +74,20 @@
       <a href="/" class="logo">CHIEW CHENG YI</a>
     </div>
     <nav class="nav-right">
-      <a href="/#about" class:active={$page.url.hash === "#about"}>About</a>
+      <a href="/about" class:active={$page.url.pathname === "/about"}>About</a>
       <a href="/projects" class:active={$page.url.pathname === "/projects"}>Projects</a>
       <a href="/awards" class:active={$page.url.pathname === "/awards"}>Awards</a>
       <a href="/publications" class:active={$page.url.pathname === "/publications"}>Publications</a>
       <a href="/writing" class:active={$page.url.pathname === "/writing"}>Writing</a>
 
-      <button class="theme-toggle" on:click={toggleTheme}>
-        {theme === "light" ? "🌙" : "☀️"}
-      </button>
+      {#if theme}
+        <button class="theme-toggle" on:click={toggleTheme} aria-label="Toggle theme">
+          <span class="sun-icon">☀️</span>
+          <span class="moon-icon">🌙</span>
+        </button>
+      {/if}
     </nav>
   </header>
-
-  <!-- <div class="content">
-    <slot />
-  </div> -->
 
   {#key $page.url.pathname}
     <div class="page page-enter">
@@ -170,7 +174,7 @@
     {/if}
 
     <!-- ================================
-         THUMBNAILS STRIP (NEW)
+         THUMBNAILS STRIP
          ================================ -->
     {#if images.length > 1}
       <div class="lb-thumbs" on:click|stopPropagation>
@@ -204,30 +208,31 @@
     --card-border: rgba(0, 0, 0, 0.15);
 
     /* BLUE */
-    --accent: #2563eb;           /* main blue */
-    --accent-hover: #1d4ed8;     /* darker blue */
-    --accent-light: #60a5fa;     /* link/hover light blue */
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+    --accent-light: #60a5fa;
 
     --btn-text-on-accent: #ffffff;
+    --toggle-track: #d1d5db;
   }
 
   :global(html[data-theme="dark"]) {
-    --bg: #0a0f1a;               /* deep navy background */
+    --bg: #0a0f1a;
     --text: #e8eef5;
     --text-muted: #9aa5b5;
 
-    --nav-bg: rgba(10, 15, 26, 0.75);  /* frosted dark blue */
+    --nav-bg: rgba(10, 15, 26, 0.75);
     --border: rgba(148, 163, 184, 0.25);
 
-    --card: #111827;             /* slate/dark card */
+    --card: #111827;
     --card-border: rgba(148, 163, 184, 0.25);
 
-    /* BLUE (dark variant) */
-    --accent: #3b82f6;           /* blue-500 */
-    --accent-hover: #2563eb;     /* blue-600 */
-    --accent-light: #60a5fa;     /* same light blue for links */
+    --accent: #3b82f6;
+    --accent-hover: #2563eb;
+    --accent-light: #60a5fa;
 
     --btn-text-on-accent: #ffffff;
+    --toggle-track: #374151;
   }
 
   /* =========================================================
@@ -294,12 +299,20 @@
     z-index: 999;
   }
 
-  /* Left + right aligned properly */
   .nav-left,
   .nav-right {
     display: flex;
     align-items: center;
     gap: 1rem;
+  }
+
+  .nav-right > a {
+    min-width: 100px;
+    text-align: center;
+  }
+
+  .nav-right > button {
+    flex-shrink: 0;
   }
 
   .logo {
@@ -319,18 +332,74 @@
     text-decoration: underline;
   }
 
-  /* Theme toggle */
+  /* =========================================================
+    THEME TOGGLE
+    ========================================================= */
   .theme-toggle {
-    background: none;
+    position: relative;
+    width: 56px;
+    height: 28px;
     border: none;
+    border-radius: 999px;
     cursor: pointer;
-    font-size: 1.1rem;
-    color: var(--text);
-    opacity: 0.75;
-    transition: opacity 0.2s ease;
+    padding: 0;
+    background: var(--toggle-track);
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Sliding thumb */
+  .theme-toggle::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    left: 2px;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+  }
+
+  :global(html[data-theme="dark"]) .theme-toggle::after {
+    left: 30px;
   }
 
   .theme-toggle:hover {
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  }
+
+  .theme-toggle:active {
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+  }
+
+  /* Icon styling */
+  .sun-icon,
+  .moon-icon {
+    position: absolute;
+    font-size: 12px;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+  }
+
+  .sun-icon {
+    left: 6px;
+    opacity: 1;
+  }
+
+  :global(html[data-theme="dark"]) .sun-icon {
+    opacity: 0;
+  }
+
+  .moon-icon {
+    right: 6px;
+    opacity: 0;
+  }
+
+  :global(html[data-theme="dark"]) .moon-icon {
     opacity: 1;
   }
 
@@ -379,6 +448,7 @@
     opacity: 0.7;
     z-index: 999999;
   }
+
   .lb-nav.left { left: 1.25rem; }
   .lb-nav.right { right: 1.25rem; }
 
@@ -391,12 +461,12 @@
     align-items: flex-start;
     cursor: grab;
     padding-top: 1vh;
-    transform: translateY(-3.5vh);  /* move whole image upward */
+    transform: translateY(-3.5vh);
   }
 
   .lb-image {
     max-width: 95vw;
-    max-height: 80vh;   /* lowered from 90vh → leaves room for thumbnails */
+    max-height: 80vh;
     object-fit: contain;
     border-radius: 12px;
     user-select: none;
@@ -406,7 +476,7 @@
 
   .lb-caption {
     position: fixed;
-    bottom: 8.5rem;       /* moved up (was 1.5rem) */
+    bottom: 8.5rem;
     color: white;
     font-size: 1.2rem;
     max-width: 70%;
@@ -425,10 +495,9 @@
   /* ================================================
    LIGHTBOX THUMBNAILS STRIP
    ================================================ */
-
   .lb-thumbs {
     position: fixed;
-    bottom: 1.25rem;       /* stays low */
+    bottom: 1.25rem;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
