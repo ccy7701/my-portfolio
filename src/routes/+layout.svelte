@@ -3,28 +3,57 @@
   import { onMount } from "svelte";
   import { afterNavigate } from "$app/navigation";
   import { page } from "$app/stores";
-  import { fly, fade } from "svelte/transition";
-  import { lightboxImage, showLightbox } from "../lib/lightbox";
+
+  import {
+    showLightbox,
+    lightboxImages,
+    lightboxCaptions,
+    lightboxIndex,
+    closeLightbox,
+    nextImage,
+    prevImage
+  } from "../lib/lightbox";
+
+  let visible;
+  let images = [];
+  let captions = [];
+  let index = 0;
 
   $: visible = $showLightbox;
-  $: image = $lightboxImage;
+  $: images = $lightboxImages;
+  $: captions = $lightboxCaptions;
+  $: index = $lightboxIndex;
 
   let theme = "light";
 
-  afterNavigate(() => {
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 0);
-  });
+  // Zoom + Pan vars...
+  let scale = 1;
+  let offsetX = 0;
+  let offsetY = 0;
+  let originX = 0;
+  let originY = 0;
+  let dragging = false;
+
+  function handleKey(e) {
+    if (!visible) return;
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowRight") nextImage();
+    if (e.key === "ArrowLeft") prevImage();
+  }
 
   onMount(() => {
+    // safe to access window here
+    window.addEventListener("keydown", handleKey);
+
+    // scroll to top on navigation
+    afterNavigate(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // theme init
     const stored = localStorage.getItem("theme");
-    if (stored) {
-      theme = stored;
-      document.documentElement.setAttribute("data-theme", stored);
-    } else {
-      document.documentElement.setAttribute("data-theme", "light");
-    }
+    theme = stored || "light";
+    document.documentElement.setAttribute("data-theme", theme);
   });
 
   function toggleTheme() {
@@ -102,9 +131,59 @@
 
 <!-- GLOBAL LIGHTBOX -->
 {#if visible}
-  <div class="lb-overlay" on:click={() => showLightbox.set(false)}>
-    <button class="lb-close" on:click={() => showLightbox.set(false)}>×</button>
-    <img class="lb-image" src={image} alt="Preview" on:click|stopPropagation />
+  <div
+    class="lb-overlay"
+    on:click={() => closeLightbox()}
+  >
+    <!-- close button -->
+    <button class="lb-close" on:click|stopPropagation={closeLightbox}>×</button>
+
+    <!-- arrows -->
+    {#if images.length > 1}
+      <button class="lb-nav left" on:click|stopPropagation={prevImage}>‹</button>
+      <button class="lb-nav right" on:click|stopPropagation={nextImage}>›</button>
+    {/if}
+
+    <!-- image container -->
+    <div
+      class="lb-img-wrapper"
+      on:wheel|stopPropagation={onWheel}
+      on:mousedown|stopPropagation={onMouseDown}
+      on:mousemove={onMouseMove}
+      on:mouseup={onMouseUp}
+      on:mouseleave={onMouseUp}
+    >
+      <img
+        src={images[index]}
+        alt=""
+        class="lb-image"
+        style="transform: translate({offsetX}px, {offsetY}px) scale({scale});"
+        on:click|stopPropagation
+      />
+    </div>
+
+    <!-- caption -->
+    {#if captions[index]}
+      <div class="lb-caption">
+        {captions[index]}
+      </div>
+    {/if}
+
+    <!-- ================================
+         THUMBNAILS STRIP (NEW)
+         ================================ -->
+    {#if images.length > 1}
+      <div class="lb-thumbs" on:click|stopPropagation>
+        {#each images as img, i}
+          <img
+            class="lb-thumb {i === index ? 'active' : ''}"
+            src={img}
+            alt="thumbnail"
+            on:click={() => lightboxIndex.set(i)}
+          />
+        {/each}
+      </div>
+    {/if}
   </div>
 {/if}
 
@@ -265,33 +344,77 @@
   .lb-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(6px);
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(8px);
     display: flex;
-    align-items: center;
     justify-content: center;
-    padding: 2rem;
-    z-index: 99999;
+    align-items: center;
+    z-index: 999999;
     animation: fadeIn 0.25s ease;
+    overflow: hidden;
   }
 
   .lb-close {
-    position: absolute;
+    position: fixed;
     top: 1rem;
-    right: 1.5rem;
+    right: 2rem;
     font-size: 3rem;
-    background: none;
     color: white;
+    background: none;
     border: none;
     cursor: pointer;
-    opacity: 0.9;
+    opacity: 0.85;
+    z-index: 999999;
+  }
+
+  .lb-nav {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 4rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    opacity: 0.7;
+    z-index: 999999;
+  }
+  .lb-nav.left { left: 1.25rem; }
+  .lb-nav.right { right: 1.25rem; }
+
+  .lb-img-wrapper {
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    cursor: grab;
+    padding-top: 1vh;
+    transform: translateY(-3.5vh);  /* move whole image upward */
   }
 
   .lb-image {
     max-width: 95vw;
-    max-height: 90vh;
-    border-radius: 10px;
-    animation: zoomIn 0.25s ease;
+    max-height: 80vh;   /* lowered from 90vh → leaves room for thumbnails */
+    object-fit: contain;
+    border-radius: 12px;
+    user-select: none;
+    pointer-events: auto;
+    transition: transform 0.15s ease;
+  }
+
+  .lb-caption {
+    position: fixed;
+    bottom: 8.5rem;       /* moved up (was 1.5rem) */
+    color: white;
+    font-size: 1.2rem;
+    max-width: 70%;
+    text-align: center;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 0, 0, 1);
+    border-radius: 8px;
+    z-index: 999999;
   }
 
   @keyframes fadeIn {
@@ -299,9 +422,47 @@
     to { opacity: 1; }
   }
 
-  @keyframes zoomIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
+  /* ================================================
+   LIGHTBOX THUMBNAILS STRIP
+   ================================================ */
+
+  .lb-thumbs {
+    position: fixed;
+    bottom: 1.25rem;       /* stays low */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 12px;
+    backdrop-filter: blur(6px);
+    max-width: 90vw;
+    overflow-x: auto;
+    z-index: 999999;
+  }
+
+  .lb-thumb {
+    width: 72px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 6px;
+    cursor: pointer;
+
+    opacity: 0.55;
+    transition: opacity 0.15s ease, transform 0.15s ease, border 0.15s ease;
+    border: 2px solid transparent;
+  }
+
+  .lb-thumb:hover {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  .lb-thumb.active {
+    opacity: 1;
+    border-color: var(--accent-light);
+    box-shadow: 0 0 6px var(--accent-light);
   }
 
   /* =========================================================

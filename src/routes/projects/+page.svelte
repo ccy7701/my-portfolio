@@ -1,18 +1,18 @@
 <!-- src/routes/projects/+page.svelte -->
 <script>
-  import { lightboxImage, showLightbox } from "../../lib/lightbox";
-  
-  let visible = false;
-  let image = "";
+  import { openLightbox } from "../../lib/lightbox";
 
   const projects = [
     {
       title: "UMS Student Academic Companion System (UMSSACS)",
       period: "2024 – 2025",
       description:
-        "A full-stack academic companion platform that helps UMS students organize timetables, track CGPA, discover events, and connect with peers through ML-assisted study partner matching.",
-      tech: "Laravel, PHP, MySQL, HTML, CSS, Bootstrap, JavaScript, Python, DigitalOcean",
-      image: "/placeholder.jpg"
+        "Web-based system that helps students organise timetables, track CGPA, discover events, and connect with peers through ML study partner matching.",
+      tech: "Laravel, PHP, MySQL, HTML, CSS, Bootstrap, JS, Python, DigitalOcean",
+      images: [
+        "/placeholder.jpg",
+        "/JomHarvest1.png"
+      ]
     },
     {
       title: "JomDining (Point of Sales App)",
@@ -20,7 +20,8 @@
       description:
         "Android-based Point of Sales system for restaurant operations. Responsible for backend logic, database schema design, and app–database integration.",
       tech: "Kotlin, SQLite, Android Studio",
-      image: "/placeholder.jpg"
+      // Only one image? Still works.
+      images: ["/placeholder.jpg"]
     },
     {
       title: "Electroholics (E-Commerce Web App)",
@@ -28,7 +29,7 @@
       description:
         "Localized e-commerce platform targeted toward computer hardware retail. Oversaw task coordination, UI development, and backend integration.",
       tech: "HTML, CSS, JavaScript, PHP, MySQL",
-      image: "/placeholder.jpg"
+      images: ["/placeholder.jpg"]
     }
   ];
 </script>
@@ -49,14 +50,18 @@
           <p class="tech">{project.tech}</p>
         </div>
 
+        <!-- Preview image -->
         <img
           class="project-image"
-          src={project.image}
+          src={project.images[0]}
           alt={project.title}
-          on:click={() => {
-            lightboxImage.set(project.image);
-            showLightbox.set(true);
-          }}
+          on:click={() =>
+            openLightbox(
+              project.images,
+              project.images.map(() => project.title),
+              0
+            )
+          }
         />
       </article>
     {/each}
@@ -74,7 +79,7 @@
 
   .project-row {
     display: flex;
-    align-items: stretch;
+    align-items: center;     /* vertical align */
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 0.75rem;
