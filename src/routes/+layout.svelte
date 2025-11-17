@@ -4,6 +4,10 @@
   import { afterNavigate } from "$app/navigation";
   import { page } from "$app/stores";
   import { fly, fade } from "svelte/transition";
+  import { lightboxImage, showLightbox } from "../lib/lightbox";
+
+  $: visible = $showLightbox;
+  $: image = $lightboxImage;
 
   let theme = "light";
 
@@ -95,6 +99,14 @@
     </div>
   </footer>
 </main>
+
+<!-- GLOBAL LIGHTBOX -->
+{#if visible}
+  <div class="lb-overlay" on:click={() => showLightbox.set(false)}>
+    <button class="lb-close" on:click={() => showLightbox.set(false)}>×</button>
+    <img class="lb-image" src={image} alt="Preview" on:click|stopPropagation />
+  </div>
+{/if}
 
 <style>
   /* =========================================================
@@ -248,6 +260,48 @@
     ========================================================= */
   .content {
     flex: 1 0 auto;
+  }
+
+  .lb-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    z-index: 99999;
+    animation: fadeIn 0.25s ease;
+  }
+
+  .lb-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 3rem;
+    background: none;
+    color: white;
+    border: none;
+    cursor: pointer;
+    opacity: 0.9;
+  }
+
+  .lb-image {
+    max-width: 95vw;
+    max-height: 90vh;
+    border-radius: 10px;
+    animation: zoomIn 0.25s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes zoomIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
   }
 
   /* =========================================================
