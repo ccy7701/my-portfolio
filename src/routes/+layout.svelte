@@ -36,6 +36,16 @@
   let originY = 0;
   let dragging = false;
 
+  function resetFade(img) {
+    // if the image is already cached and loaded instantly
+    if (img.complete) fading = "";
+  }
+
+  function onWheel() {}
+  function onMouseDown() {}
+  function onMouseMove() {}
+  function onMouseUp() {}
+
   function handleCloseLightbox() {
     isClosing = true;
     setTimeout(() => {
@@ -189,6 +199,7 @@
         class="lb-image {fading}"
         style="transform: translate({offsetX}px, {offsetY}px) scale({scale});"
         on:load={() => (fading = "")}
+        use:resetFade
         on:click|stopPropagation
       />
     </div>
