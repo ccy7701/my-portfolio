@@ -138,7 +138,7 @@
 
   .award-title {
     font-size: 1.35rem;
-    font-weight: 700;
+    font-weight: 600;
     margin: 0;
   }
 
