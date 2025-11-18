@@ -136,4 +136,10 @@
     line-height: 1.6;
     color: var(--text);
   }
+
+  @media (max-width: 768px) {
+    .image-container img {
+      max-width: 75%;
+    }
+  }
 </style>
