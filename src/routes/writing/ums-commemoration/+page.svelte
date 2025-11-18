@@ -102,6 +102,18 @@
     color: var(--text-muted);
   }
 
+  @media (max-width: 900px) {
+    .subtitle-date {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5em;
+    }
+
+    .date {
+      font-size: 0.85em;
+    }
+  }
+
   .divider {
     border: 0;
     height: 1px;
