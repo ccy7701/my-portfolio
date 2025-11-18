@@ -2,7 +2,9 @@
   export let data;
 </script>
 
-<a href="/projects" class="back-link">← Back to Projects</a>
+<div class="back-link-container">
+  <a href="/projects" class="back-link">← Back to Projects</a>
+</div>
 
 <article class="project-article">
   <h1>{data.project.title}</h1>
@@ -17,9 +19,21 @@
 </article>
 
 <style>
+  .back-link-container {
+    margin-bottom: 1.5em;
+    display: block;
+  }
+
   .back-link {
     text-decoration: none;
-    color: var(--accent);
+    color: var(--text);
+    font-weight: 500;
+    font-size: 0.95em;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: var(--accent-light);
   }
 
   .project-images img {
