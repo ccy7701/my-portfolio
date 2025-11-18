@@ -28,12 +28,12 @@
     </p>
 
     <p>
-      &emsp;&emsp;&emsp;Four years ago, I entered with fear. I was set on becoming a civil engineer up until the final moment because I thought to myself, being the ignoramus I was – I think SWE is something I can be decent at because I like computers. However, I had nary any exposure to computer science (CS) outside of hobbyist pursuits. My fear was that the lack of a formal foundation to CS would make me fall behind.
+      &emsp;&emsp;Four years ago, I entered with fear. I was set on becoming a civil engineer up until the final moment because I thought to myself, being the ignoramus I was – I think SWE is something I can be decent at because I like computers. However, I had nary any exposure to computer science (CS) outside of hobbyist pursuits. My fear was that the lack of a formal foundation to CS would make me fall behind.
       &emsp;&emsp;&emsp;Four years ago, I entered with fear. I was set on becoming a civil engineer up until the final moment because I thought to myself, being the ignoramus I was – I think SWE is something I can be decent at because I like computers. However, I had nary any exposure to computer science (CS) outside of hobbyist pursuits. My fear was that the lack of a formal foundation to CS would make me fall behind.
     </p>
 
     <p>
-      &emsp;&emsp;&emsp;That’s why when I first started the degree, I was very attentive. I took notes, recorded lectures, watched online tutorials and played with code in my free time. When my first semester results came in and I got an SGPA of 3.96, I honestly thought it was a fluke. The next semester I got a 3.92, then a 3.96 after that, after which I figured “oh my, I must be on to something”. So, I kept studying. I didn’t want to look like an impostor.
+      &emsp;&emsp;That’s why when I first started the degree, I was very attentive. I took notes, recorded lectures, watched online tutorials and played with code in my free time. When my first semester results came in and I got an SGPA of 3.96, I honestly thought it was a fluke. The next semester I got a 3.92, then a 3.96 after that, after which I figured “oh my, I must be on to something”. So, I kept studying. I didn’t want to look like an impostor.
       &emsp;&emsp;&emsp;That’s why when I first started the degree, I was very attentive. I took notes, recorded lectures, watched online tutorials and played with code in my free time. When my first semester results came in and I got an SGPA of 3.96, I honestly thought it was a fluke. The next semester I got a 3.92, then a 3.96 after that, after which I figured “oh my, I must be on to something”. So, I kept studying. I didn’t want to look like an impostor.
     </p>
 
