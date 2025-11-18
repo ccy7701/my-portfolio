@@ -54,7 +54,7 @@
 
     <!-- Right: Photo -->
     <div class="hero-photo-wrapper">
-      <img src="./profile.jpeg" alt="Profile photo" class="hero-photo" />
+      <img src="./profile.jpg" alt="Profile photo" class="hero-photo" />
     </div>
   </div>
 </section>
