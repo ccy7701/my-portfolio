@@ -377,6 +377,12 @@
   }
 
   /* Responsive */
+  @media (max-width: 900px) {
+    .about-container {
+      margin-top: 1.25rem;
+    }
+  }
+
   @media (max-width: 767px) {
     .hero-title {
       font-size: 2rem;
