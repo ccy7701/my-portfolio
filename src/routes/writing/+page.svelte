@@ -128,4 +128,10 @@
     font-size: 0.9rem;
     line-height: 1.45;
   }
+
+  @media (max-width: 900px) {
+    .section-header-inner {
+      margin: 0 auto 3.0rem;
+    }
+  }
 </style>

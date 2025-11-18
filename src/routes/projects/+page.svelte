@@ -134,4 +134,20 @@
     border-radius: 10px;
     object-fit: cover;
   }
+
+  @media (max-width: 750px) {
+    .project-card {
+      flex-direction: column;
+    }
+    .project-thumb {
+      width: 100%;
+      max-height: 240px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .section-header-inner {
+      margin: 0 auto 3.0rem;
+    }
+  }
 </style>

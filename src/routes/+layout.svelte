@@ -29,6 +29,7 @@
   $: index = $lightboxIndex;
 
   let theme;
+  let mobileMenuOpen = false;
 
   // Zoom + Pan vars...
   let scale = 1;
@@ -75,6 +76,9 @@
 
   // scroll to top on navigation
   afterNavigate(() => {
+    // Close mobile menu on navigation
+    mobileMenuOpen = false;
+    
     // Let Svelte update the DOM first
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -88,6 +92,10 @@
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }
+
+  function toggleMobileMenu() {
+    mobileMenuOpen = !mobileMenuOpen;
+  }
 </script>
 
 <main class="shell">
@@ -95,7 +103,16 @@
     <div class="nav-left">
       <a href="/" class="logo">CHIEW CHENG YI</a>
     </div>
-    <nav class="nav-right">
+
+    <!-- Hamburger button (mobile only) -->
+    <button class="hamburger" on:click={toggleMobileMenu} aria-label="Toggle menu">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+
+    <!-- Navigation menu -->
+    <nav class="nav-right" class:mobile-open={mobileMenuOpen}>
       <a href="/about" class:active={$page.url.pathname === "/about"}>About</a>
       <a href="/projects" class:active={$page.url.pathname === "/projects"}>Projects</a>
       <a href="/awards" class:active={$page.url.pathname === "/awards"}>Awards</a>
@@ -372,6 +389,76 @@
   .nav-right a:hover {
     opacity: 1;
     text-decoration: underline;
+  }
+
+  /* Hamburger menu (hidden on desktop) */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1001;
+  }
+
+  .hamburger-line {
+    width: 25px;
+    height: 2px;
+    background: var(--text);
+    transition: all 0.3s ease;
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 900px) {
+    .shell {
+      padding: 5rem 1.5rem 4rem;
+    }
+
+    .hamburger {
+      display: flex;
+    }
+
+    .nav-right {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      width: 70%;
+      max-width: 320px;
+      background: var(--card);
+      border-left: 1px solid var(--border);
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: stretch;
+      padding: 5rem 1.5rem 2rem;
+      gap: 0;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-right.mobile-open {
+      transform: translateX(0);
+    }
+
+    .nav-right > a {
+      min-width: unset;
+      text-align: left;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 1.1rem;
+    }
+
+    .nav-right > a:last-of-type {
+      border-bottom: none;
+    }
+
+    .nav-right > button.theme-toggle {
+      margin-top: auto;
+      align-self: flex-start;
+    }
   }
 
   /* =========================================================

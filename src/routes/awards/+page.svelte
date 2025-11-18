@@ -202,6 +202,12 @@
     transform: scale(1.03);
   }
 
+  @media (max-width: 900px) {
+    .section-header-inner {
+      margin: 0 auto 3.0rem;
+    }
+  }
+
   @media (max-width: 750px) {
     .award-row {
       flex-direction: column;

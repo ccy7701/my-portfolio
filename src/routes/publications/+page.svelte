@@ -68,7 +68,7 @@
   .section-header-inner {
     text-align: center;
     max-width: 680px;
-    margin: 0 auto 3.5rem;
+    margin: 0 auto 4.0rem;
   }
 
   .section-header h2 {
@@ -177,5 +177,11 @@
 
   .pub-points li {
     margin-bottom: 0.35rem;
+  }
+
+  @media (max-width: 900px) {
+    .section-header-inner {
+      margin: 0 auto 3.0rem;
+    }
   }
 </style>
