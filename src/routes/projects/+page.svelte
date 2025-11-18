@@ -21,7 +21,7 @@
 
 <section class="section section-header">
   <div class="section-header-inner">
-    <h2>Projects</h2>
+    <h2>Projects (NOT DONE)</h2>
     <p class="section-subtitle">
       Technical projects I’ve undertaken across full-stack web development, mobile applications, and applied software engineering
     </p>
