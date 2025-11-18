@@ -61,7 +61,7 @@
 
 <style>
   .hero-pro {
-    margin-top: 4rem;
+    margin-top: 1rem;
   }
 
   .hero-grid {
@@ -75,7 +75,18 @@
   @media (max-width: 800px) {
     .hero-grid {
       grid-template-columns: 1fr;
-      text-align: center;
+    }
+    .hero-text-block {
+      text-align: left;
+    }
+    .hero-text-block h1,
+    .hero-text-block .subtitle,
+    .hero-text-block .intro {
+      text-align: left;
+    }
+    .social-links,
+    .download-buttons {
+      justify-content: flex-start;
     }
     .hero-photo-wrapper {
       justify-content: center;
