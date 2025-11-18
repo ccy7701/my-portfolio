@@ -168,6 +168,14 @@
         </div>
         <div class="footer-meta">
           <small>© {new Date().getFullYear()} Chiew Cheng Yi</small>
+          
+          <!-- Theme toggle for mobile only -->
+          {#if theme}
+            <button class="theme-toggle footer-theme-toggle" on:click={toggleTheme} aria-label="Toggle theme">
+              <span class="sun-icon">☀️</span>
+              <span class="moon-icon">🌙</span>
+            </button>
+          {/if}
         </div>
       </div>
     </footer>
@@ -714,6 +722,24 @@
 
   .footer a:hover {
     text-decoration: underline;
+  }
+
+  .footer-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* Footer theme toggle - mobile only */
+  .footer-theme-toggle {
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    .footer-theme-toggle {
+      display: flex;
+    }
   }
 
   /* =========================================================
