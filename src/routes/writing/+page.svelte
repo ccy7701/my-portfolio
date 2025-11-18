@@ -72,14 +72,32 @@
     border-radius: 12px;
     background: var(--card);
     border: 1px solid var(--card-border);
-    transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
     text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .writing-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 0;
+    background: linear-gradient(180deg, var(--accent), var(--accent-light));
+    transition: height 0.3s ease;
+    border-radius: 12px 0 0 12px;
   }
 
   .writing-card:hover {
-    border-color: var(--accent-light);
-    background: rgba(0, 0, 0, 0.03);
-    transform: translateY(-2px);
+    border-color: rgba(59, 130, 246, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  .writing-card:hover::before {
+    height: 100%;
   }
 
   /* ---- Top: Title (left) | Date (right) ---- */
