@@ -3,6 +3,10 @@
   import image from './image_1.jpg';
 </script>
 
+<svelte:head>
+  <title>{data.meta.title}</title>
+</svelte:head>
+
 <div class="back-link-container">
   <a href="/writing" class="back-link">← Back to Writings</a>
 </div>

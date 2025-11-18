@@ -56,6 +56,10 @@
   ];
 </script>
 
+<svelte:head>
+  <title>Awards & Competitions</title>
+</svelte:head>
+
 <section class="section section-header">
   <div class="section-header-inner">
     <h2>Awards & Competitions</h2>

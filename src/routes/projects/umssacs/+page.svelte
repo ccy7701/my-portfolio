@@ -2,6 +2,10 @@
   export let data;
 </script>
 
+<svelte:head>
+  <title>{data.project.title}</title>
+</svelte:head>
+
 <div class="back-link-container">
   <a href="/projects" class="back-link">← Back to Projects</a>
 </div>

@@ -19,6 +19,10 @@
     .sort((a, b) => a.order - b.order);
 </script>
 
+<svelte:head>
+  <title>Projects</title>
+</svelte:head>
+
 <section class="section section-header">
   <div class="section-header-inner">
     <h2>Projects (NOT DONE)</h2>

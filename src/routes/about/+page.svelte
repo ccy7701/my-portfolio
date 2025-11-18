@@ -47,7 +47,7 @@
 </script>
 
 <svelte:head>
-  <title>About | Chiew Cheng Yi</title>
+  <title>About</title>
 </svelte:head>
 
 <div class="about-container" class:visible>

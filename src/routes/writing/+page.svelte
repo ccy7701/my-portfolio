@@ -17,6 +17,10 @@
     .sort((a, b) => new Date(b.date) - new Date(a.date)); // newest first
 </script>
 
+<svelte:head>
+  <title>Writing</title>
+</svelte:head>
+
 <section class="section section-header">
   <div class="section-header-inner">
     <h2>Writing</h2>

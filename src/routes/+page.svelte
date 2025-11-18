@@ -2,6 +2,10 @@
   export const hideFooter = true;
 </script>
 
+<svelte:head>
+  <title>Chiew Cheng Yi | Software Engineering Graduate</title>
+</svelte:head>
+
 <section class="hero-pro">
   <div class="hero-grid">
 

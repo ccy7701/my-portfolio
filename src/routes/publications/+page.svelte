@@ -25,6 +25,10 @@
   ];
 </script>
 
+<svelte:head>
+  <title>Publications</title>
+</svelte:head>
+
 <section class="section section-header">
   <div class="section-header-inner">
     <h2>Publications</h2>
