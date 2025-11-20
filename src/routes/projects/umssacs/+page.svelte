@@ -6,11 +6,26 @@
   
   let visible = false;
   let statsVisible = false;
+  let theme = 'light';
   
   onMount(() => {
     setTimeout(() => visible = true, 100);
     
-    const observer = new IntersectionObserver((entries) => {
+    // Get initial theme
+    const htmlElement = document.documentElement;
+    theme = htmlElement.getAttribute('data-theme') || 'light';
+    
+    // Listen for theme changes
+    const observer = new MutationObserver(() => {
+      const newTheme = htmlElement.getAttribute('data-theme') || 'light';
+      if (newTheme !== theme) {
+        theme = newTheme;
+      }
+    });
+    
+    observer.observe(htmlElement, { attributes: true, attributeFilter: ['data-theme'] });
+    
+    const intersectionObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           statsVisible = true;
@@ -19,9 +34,12 @@
     }, { threshold: 0.3 });
     
     const statsSection = document.querySelector('.stats-grid');
-    if (statsSection) observer.observe(statsSection);
+    if (statsSection) intersectionObserver.observe(statsSection);
     
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      intersectionObserver.disconnect();
+    };
   });
   
   const features = [
@@ -127,7 +145,7 @@
   <!-- Hero Section with Logo -->
   <section class="hero-section">
     <div class="logo-container">
-      <img src="/projects/umssacs/umssacs_logo.png" alt="UMSSACS Logo" class="project-logo" />
+      <img src={theme === 'dark' ? '/projects/umssacs/umssacs_logo_darkmode.png' : '/projects/umssacs/umssacs_logo_lightmode.png'} alt="UMSSACS Logo" class="project-logo" />
     </div>
     <h1 class="project-title">UMS Student Academic Companion System (UMSSACS)</h1>
     <p class="project-description">{data.project.description}</p>
@@ -199,64 +217,72 @@
   <section class="tech-section">
     <h2 class="section-title">Technical Stack</h2>
     
-    <div class="tech-category-section">
-      <h3 class="tech-category-title">Frontend</h3>
-      <div class="tech-grid">
-        <div class="tech-badge">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" class="tech-icon" />
-          <span class="tech-name">HTML5</span>
+    <div class="tech-categories">
+      <div class="tech-category-card">
+        <div class="tech-category-header">
+          <h3 class="tech-category-name">Frontend</h3>
         </div>
-        <div class="tech-badge">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" class="tech-icon" />
-          <span class="tech-name">CSS3</span>
-        </div>
-        <div class="tech-badge">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap" class="tech-icon" />
-          <span class="tech-name">Bootstrap</span>
-        </div>
-        <div class="tech-badge">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sass/sass-original.svg" alt="SASS" class="tech-icon" />
-          <span class="tech-name">SASS</span>
-        </div>
-        <div class="tech-badge">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" class="tech-icon" />
-          <span class="tech-name">JavaScript</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="tech-category-section">
-      <h3 class="tech-category-title">Backend</h3>
-      <div class="tech-grid">
-        <div class="tech-badge">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg" alt="Laravel" class="tech-icon" />
-          <span class="tech-name">Laravel</span>
-        </div>
-        <div class="tech-badge">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" class="tech-icon" />
-          <span class="tech-name">PHP</span>
-        </div>
-        <div class="tech-badge">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" class="tech-icon" />
-          <span class="tech-name">Python</span>
-        </div>
-        <div class="tech-badge">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original-wordmark.svg" alt="MySQL" class="tech-icon" />
-          <span class="tech-name">MySQL</span>
+        <div class="tech-items">
+          <div class="tech-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" class="tech-item-icon" />
+            <span>HTML5</span>
+          </div>
+          <div class="tech-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" class="tech-item-icon" />
+            <span>CSS3</span>
+          </div>
+          <div class="tech-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap" class="tech-item-icon" />
+            <span>Bootstrap</span>
+          </div>
+          <div class="tech-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sass/sass-original.svg" alt="SASS" class="tech-item-icon" />
+            <span>SASS</span>
+          </div>
+          <div class="tech-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" class="tech-item-icon" />
+            <span>JavaScript</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="tech-category-section">
-      <h3 class="tech-category-title">Deployment</h3>
-      <div class="tech-grid">
-        <div class="tech-badge">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apache/apache-original-wordmark.svg" alt="Apache" class="tech-icon" />
-          <span class="tech-name">Apache</span>
+      <div class="tech-category-card">
+        <div class="tech-category-header">
+          <h3 class="tech-category-name">Backend</h3>
         </div>
-        <div class="tech-badge">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/digitalocean/digitalocean-original.svg" alt="DigitalOcean" class="tech-icon" />
-          <span class="tech-name">DigitalOcean</span>
+        <div class="tech-items">
+          <div class="tech-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg" alt="Laravel" class="tech-item-icon" />
+            <span>Laravel</span>
+          </div>
+          <div class="tech-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" class="tech-item-icon" />
+            <span>PHP</span>
+          </div>
+          <div class="tech-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" class="tech-item-icon" />
+            <span>Python</span>
+          </div>
+          <div class="tech-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original-wordmark.svg" alt="MySQL" class="tech-item-icon" />
+            <span>MySQL</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tech-category-card">
+        <div class="tech-category-header">
+          <h3 class="tech-category-name">Deployment</h3>
+        </div>
+        <div class="tech-items">
+          <div class="tech-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apache/apache-original-wordmark.svg" alt="Apache" class="tech-item-icon" />
+            <span>Apache</span>
+          </div>
+          <div class="tech-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/digitalocean/digitalocean-original.svg" alt="DigitalOcean" class="tech-item-icon" />
+            <span>DigitalOcean</span>
+          </div>
         </div>
       </div>
     </div>
@@ -539,10 +565,10 @@
     top: 0;
     left: 0;
     width: 4px;
-    height: 100%;
+    height: 0;
     background: linear-gradient(180deg, var(--accent), var(--accent-light));
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: height 0.3s ease;
+    border-radius: 12px 0 0 12px;
   }
 
   .feature-card:hover {
@@ -552,7 +578,7 @@
   }
 
   .feature-card:hover::before {
-    opacity: 1;
+    height: 100%;
   }
 
   .feature-icon {
@@ -626,58 +652,69 @@
   }
 
   /* Tech Stack */
-  .tech-category-section {
+  .tech-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
     margin-bottom: 2.5rem;
   }
 
-  .tech-category-section:last-of-type {
-    margin-bottom: 0;
+  .tech-category-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1.75rem;
   }
 
-  .tech-category-title {
-    font-size: 1.2rem;
+  .tech-category-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .tech-category-name {
+    font-size: 1.25rem;
     font-weight: 600;
     color: var(--text);
-    margin-bottom: 1.25rem;
-    padding-left: 0.5rem;
+    margin: 0;
   }
 
-  .tech-grid {
+  .tech-items {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 1rem;
   }
 
-  .tech-badge {
+  .tech-item {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    padding: 1.5rem 1.75rem;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
     border-radius: 8px;
-    transition: all 0.3s ease;
-    min-width: 100px;
+    transition: all 0.2s ease;
   }
 
-  .tech-badge:hover {
-    transform: translateY(-4px);
+  .tech-item:hover {
+    background: var(--card);
     border-color: var(--accent-light);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+    transform: translateX(4px);
   }
 
-  .tech-icon {
-    width: 50px;
-    height: 50px;
+  .tech-item-icon {
+    width: 32px;
+    height: 32px;
     object-fit: contain;
+    flex-shrink: 0;
   }
 
-  .tech-name {
-    font-weight: 600;
+  .tech-item span {
     font-size: 0.95rem;
+    font-weight: 500;
     color: var(--text);
-    text-align: center;
   }
 
   .implementation-details {
@@ -834,10 +871,10 @@
     top: 0;
     left: 0;
     width: 4px;
-    height: 100%;
+    height: 0;
     background: linear-gradient(180deg, var(--accent), var(--accent-light));
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: height 0.3s ease;
+    border-radius: 12px 0 0 12px;
   }
 
   .learning-card:hover {
@@ -847,7 +884,7 @@
   }
 
   .learning-card:hover::before {
-    opacity: 1;
+    height: 100%;
   }
 
   .learning-card h3 {
@@ -902,10 +939,10 @@
     top: 0;
     left: 0;
     width: 4px;
-    height: 100%;
+    height: 0;
     background: linear-gradient(180deg, var(--accent), var(--accent-light));
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: height 0.3s ease;
+    border-radius: 12px 0 0 12px;
   }
 
   .future-item:hover {
@@ -915,7 +952,7 @@
   }
 
   .future-item:hover::before {
-    opacity: 1;
+    height: 100%;
   }
 
   .future-number {

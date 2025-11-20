@@ -1,6 +1,10 @@
 <!-- src/routes/projects/+page.svelte -->
 <script>
+  import { onMount } from 'svelte';
+
   const modules = import.meta.glob('./*/+page.js', { eager: true });
+  
+  let theme = 'light';
 
   const projects = Object.entries(modules)
     .map(([path, mod]) => {
@@ -13,10 +17,37 @@
         title: data.title,
         period: data.period,
         description: data.description,
-        thumbnail: data.images[0]
+        images: data.images
       };
     })
     .sort((a, b) => a.order - b.order);
+
+  function getThumbnail(images) {
+    if (!images || images.length === 0) return '';
+    
+    // Check if project has both lightmode and darkmode logos
+    const lightLogo = images.find(img => img.includes('_logo_lightmode'));
+    const darkLogo = images.find(img => img.includes('_logo_darkmode'));
+    
+    if (lightLogo && darkLogo) {
+      return theme === 'dark' ? darkLogo : lightLogo;
+    }
+    
+    return images[0];
+  }
+
+  onMount(() => {
+    const htmlElement = document.documentElement;
+    theme = htmlElement.getAttribute('data-theme') || 'light';
+
+    const observer = new MutationObserver(() => {
+      theme = htmlElement.getAttribute('data-theme') || 'light';
+    });
+
+    observer.observe(htmlElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+    return () => observer.disconnect();
+  });
 </script>
 
 <svelte:head>
@@ -42,7 +73,9 @@
         <p>{p.description}</p>
       </div>
 
-      <img src={p.thumbnail} alt={p.title} class="project-thumb" />
+      {#key theme}
+        <img src={getThumbnail(p.images)} alt={p.title} class="project-thumb" />
+      {/key}
     </a>
   {/each}
 </section>
