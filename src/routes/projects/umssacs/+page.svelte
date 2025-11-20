@@ -551,12 +551,14 @@
     border: 1px solid var(--card-border);
     padding: 2rem 1.75rem;
     border-radius: 12px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 0;
-    animation: slideInUp 0.6s ease forwards;
-    animation-delay: var(--delay);
     position: relative;
     overflow: hidden;
+    opacity: 1;
+    transform: translateY(0);
+    animation: slideInUp 0.6s ease backwards;
+    animation-delay: var(--delay);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    will-change: transform;
   }
 
   .feature-card::before {
@@ -573,7 +575,7 @@
 
   .feature-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
     border-color: rgba(59, 130, 246, 0.3);
   }
 
@@ -878,8 +880,8 @@
   }
 
   .learning-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
     border-color: rgba(59, 130, 246, 0.3);
   }
 
@@ -946,8 +948,8 @@
   }
 
   .future-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
     border-color: rgba(59, 130, 246, 0.3);
   }
 
