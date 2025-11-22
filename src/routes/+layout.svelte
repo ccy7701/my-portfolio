@@ -114,7 +114,7 @@
     <!-- Navigation menu -->
     <nav class="nav-right" class:mobile-open={mobileMenuOpen}>
       <a href="/about" class:active={$page.url.pathname === "/about"}>About</a>
-      <a href="/projects" class:active={$page.url.pathname === "/projects"}>Projects</a>
+      <a href="/projects" class:active={$page.url.pathname.startsWith("/projects")}>Projects</a>
       <a href="/awards" class:active={$page.url.pathname === "/awards"}>Awards</a>
       <a href="/publications" class:active={$page.url.pathname === "/publications"}>Publications</a>
       <a href="/writing" class:active={$page.url.pathname.startsWith("/writing")}>Writing</a>

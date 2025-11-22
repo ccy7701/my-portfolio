@@ -134,7 +134,7 @@
 </script>
 
 <svelte:head>
-  <title>{data.project.title} | Chiew Cheng Yi</title>
+  <title>{data.project.title}</title>
 </svelte:head>
 
 <div class="umssacs-container" class:visible>
